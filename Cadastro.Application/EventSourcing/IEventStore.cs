@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Cadastro.Domain.Events;
 
 namespace Cadastro.Application.EventSourcing
 {
-    internal interface IEventStore
+    public interface IEventStore
     {
+        Task SalvarEvento(ClienteCadastradoEvent evento);
     }
 }

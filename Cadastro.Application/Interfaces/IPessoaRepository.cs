@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Cadastro.Domain.Entities;
 
 namespace Cadastro.Application.Interfaces
 {
     internal interface IPessoaRepository
     {
+        Task Adicionar(Pessoa cliente);
+        Task<bool> ExistePorCpfCnpj(string cpfCnpj);
+        Task<bool> ExistePorEmail(string email);
     }
 }

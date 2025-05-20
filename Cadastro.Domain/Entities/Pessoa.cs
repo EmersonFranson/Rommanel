@@ -1,12 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Cadastro.Domain.Enums;
+using Cadastro.Domain.Interfaces;
 
 namespace Cadastro.Domain.Entities
 {
-    internal class Pessoa
+    public class Pessoa : IAggregateRoot
     {
+        public Guid Id { get; private set; }
+        public string NomeRazaoSocial { get; private set; }
+        public string CpfCnpj { get; private set; }
+        public DateTime? DataNascimento { get; private set; }
+        public string Telefone { get; private set; }
+        public string Email { get; private set; }
+        public Endereco Endereco { get; private set; }
+        public string TipoPessoa { get; private set; } // "F" ou "J"
+        public string? InscricaoEstadual { get; private set; }
+        public bool IsentoIE { get; private set; }
     }
 }
