@@ -1,9 +1,6 @@
-﻿using Cadastro.Domain.Enums;
-using Cadastro.Domain.Interfaces;
-
-namespace Cadastro.Domain.Entities
+﻿namespace Cadastro.Domain.Entities
 {
-    public class Pessoa : IAggregateRoot
+    public class Cliente 
     {
         public Guid Id { get; private set; }
         public string NomeRazaoSocial { get; private set; }

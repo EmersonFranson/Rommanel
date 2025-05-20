@@ -11,7 +11,7 @@ namespace Cadastro.Infrastructure
         {
         }
 
-        public DbSet<Pessoa> Clientes { get; set; }
+        public DbSet<Cliente> Clientes { get; set; }
         public DbSet<Endereco> Enderecos { get; set; }
         public DbSet<StoredEvent> StoredEvents { get; set; }
 

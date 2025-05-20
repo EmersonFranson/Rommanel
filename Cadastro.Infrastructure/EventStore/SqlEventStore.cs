@@ -1,4 +1,5 @@
-﻿using Cadastro.Domain.Events; 
+﻿using Cadastro.Application.Common.Interfaces;
+using Cadastro.Domain.Events; 
 using Cadastro.Domain.Interfaces;
 using Cadastro.Infrastructure;
 using System.Text.Json;

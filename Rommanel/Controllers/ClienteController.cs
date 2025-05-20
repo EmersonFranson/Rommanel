@@ -1,5 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Cadastro.Application.UseCases.Commands;
 using MediatR;
+using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
@@ -11,16 +12,13 @@ namespace API.Controllers
 
         public ClienteController(IMediator mediator)
         {
-            _mediator = mediator;
+            _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] CadastrarPessoaCommand command)
+        public async Task<IActionResult> Post([FromBody] ClienteCommandRequest command)
         {
             var result = await _mediator.Send(command);
-
-            if (!result.Sucesso)
-                return BadRequest(result);
 
             return Ok(result);
         }

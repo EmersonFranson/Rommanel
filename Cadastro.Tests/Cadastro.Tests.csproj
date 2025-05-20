@@ -19,6 +19,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Cadastro.Application\Cadastro.Application.csproj" />
+    <ProjectReference Include="..\Cadastro.Infrastructure\Cadastro.Infrastructure.csproj" />
+    <ProjectReference Include="..\Rommanel\Cadastro.Api.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Using Include="Xunit" />
   </ItemGroup>
 
