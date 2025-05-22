@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver
+    environment:
+      SA_PASSWORD: "@Rommanel123"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sql_data:/var/opt/mssql
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+
+  webapi:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: webapi
+    ports:
+      - "8080:80"
+    depends_on:
+      - sqlserver
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: "Server=sqlserver,1433;Database=CadastroClientesDb;User Id=sa;Password=@Rommanel123;TrustServerCertificate=True"
+
+volumes:
+  sql_data:

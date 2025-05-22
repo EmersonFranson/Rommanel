@@ -1,28 +1,49 @@
-using Microsoft.AspNetCore.Hosting;
+﻿using Cadastro.Application.Common.Interfaces.Persistence;
+using Cadastro.Application.UseCases.Commands;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
+using Cadastro.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// ⛓️ Add Controllers
 builder.Services.AddControllers();
+
+// 📦 Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+    c.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title = "API",
+        Title = "API de Cadastro de Cliente",
         Version = "v1"
     });
 });
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(Program).Assembly));
+
+// 🔌 Entity Framework + SQL Server (use Docker Compose para rodar o banco)
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// 🔁 Registro do contexto no container de injeção
+builder.Services.AddScoped<IAppDbContext, AppDbContext>();
+
+// 💬 MediatR - Registra comandos, handlers, etc.
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(
+    typeof(Program).Assembly,
+    typeof(ClienteCommandRequest).Assembly
+));
 
 var app = builder.Build();
 
-app.UseSwagger(options => options.OpenApiVersion =
-Microsoft.OpenApi.OpenApiSpecVersion.OpenApi3_0);
-
+// 🌐 Swagger UI
+app.UseSwagger(options =>
+{
+    options.OpenApiVersion = Microsoft.OpenApi.OpenApiSpecVersion.OpenApi3_0;
+});
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1");
-    c.RoutePrefix = string.Empty; 
+    c.RoutePrefix = string.Empty;
 });
 
 app.UseHttpsRedirection();
