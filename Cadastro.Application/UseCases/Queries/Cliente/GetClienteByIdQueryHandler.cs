@@ -19,7 +19,7 @@ namespace Cadastro.Application.UseCases.Handlers
         {
             return await _context.Clientes
                 .Include(c => c.Endereco)
-                .FirstOrDefaultAsync(c => c.Id == request.Id, cancellationToken);
+                .FirstOrDefaultAsync(c => c.ClienteId == request.Id, cancellationToken);
         }
     }
 }

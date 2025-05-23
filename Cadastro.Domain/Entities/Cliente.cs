@@ -2,15 +2,15 @@
 {
     public class Cliente 
     {
-        public Guid Id { get; private set; }
+        public Guid ClienteId { get;  set; }
         public string NomeRazaoSocial { get;  set; }
-        public string CpfCnpj { get;  set; }
+        public string Documento { get;  set; }
         public DateTime? DataNascimento { get; set; }
         public string Telefone { get; set; }
         public string Email { get; set; }
-        public Endereco Endereco { get; set; }
-        public string TipoPessoa { get; set; } // "F" ou "J"
+        public bool IsPessoaJuridica { get; set; }        
         public string? InscricaoEstadual { get; set; }
-        public bool IsentoIE { get; set; }      
+        public bool IsentoIE { get; set; }
+        public Endereco Endereco { get; set; }
     }
 }

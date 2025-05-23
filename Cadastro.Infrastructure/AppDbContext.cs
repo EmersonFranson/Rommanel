@@ -16,8 +16,6 @@ namespace Cadastro.Infrastructure.Persistence
         public DbSet<Endereco> Enderecos { get; set; }
         public DbSet<StoredEvent> StoredEvents { get; set; }
 
-        // CRUD Methods
-
         public async Task<List<Cliente>> BuscarTodosClientesAsync(CancellationToken cancellationToken = default)
         {
             return await Clientes
@@ -29,12 +27,13 @@ namespace Cadastro.Infrastructure.Persistence
         {
             return await Clientes
                 .Include(c => c.Endereco)
-                .FirstOrDefaultAsync(c => c.Id == id, cancellationToken);
+                .FirstOrDefaultAsync(c => c.ClienteId == id, cancellationToken);
         }
 
         public async Task<Cliente> AdicionarClienteAsync(Cliente cliente, CancellationToken cancellationToken = default)
         {
             await Clientes.AddAsync(cliente, cancellationToken);
+            await Enderecos.AddAsync(cliente.Endereco, cancellationToken);
             await SaveChangesAsync(cancellationToken);
             return cliente;
         }
@@ -43,7 +42,7 @@ namespace Cadastro.Infrastructure.Persistence
         {
             var clienteExistente = await Clientes
                 .Include(c => c.Endereco)
-                .FirstOrDefaultAsync(c => c.Id == clienteAtualizado.Id, cancellationToken);
+                .FirstOrDefaultAsync(c => c.ClienteId == clienteAtualizado.ClienteId, cancellationToken);
 
             if (clienteExistente == null)
                 return null;
@@ -61,7 +60,7 @@ namespace Cadastro.Infrastructure.Persistence
 
         public async Task<bool> RemoverClienteAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            var cliente = await Clientes.FirstOrDefaultAsync(c => c.Id == id, cancellationToken);
+            var cliente = await Clientes.FirstOrDefaultAsync(c => c.ClienteId == id, cancellationToken);
             if (cliente == null)
                 return false;
 
@@ -81,26 +80,27 @@ namespace Cadastro.Infrastructure.Persistence
 
             modelBuilder.Entity<Cliente>(entity =>
             {
-                entity.HasKey(c => c.Id);
+                entity.HasKey(c => c.ClienteId);
 
                 entity.Property(c => c.NomeRazaoSocial)
                       .IsRequired()
                       .HasMaxLength(200);
 
                 entity.HasIndex(c => c.Email).IsUnique();
-                entity.HasIndex(c => c.CpfCnpj).IsUnique();
+                entity.HasIndex(c => c.Documento).IsUnique();
 
-                entity.HasOne(c => c.Endereco)
-                      .WithOne()
-                      .HasForeignKey<Endereco>(e => e.ClienteId)
-                      .OnDelete(DeleteBehavior.Cascade);
+                //// Relacionamento 1:1 com Endereco
+                //entity.HasOne(c => c.Endereco)
+                //      .WithOne(e => e.Cliente)
+                //      .HasForeignKey<Endereco>(e => e.ClienteId)
+                //      .OnDelete(DeleteBehavior.Cascade);
             });
 
             modelBuilder.Entity<Endereco>(entity =>
             {
-                entity.HasKey(e => e.Id);
+                entity.HasKey(e => e.EnderecoId); // <- CORRIGIDO
 
-                entity.Property(e => e.Cep)
+                entity.Property(e => e.CEP)
                       .IsRequired()
                       .HasMaxLength(10);
 
@@ -125,5 +125,6 @@ namespace Cadastro.Infrastructure.Persistence
                       .HasMaxLength(50);
             });
         }
+
     }
 }
