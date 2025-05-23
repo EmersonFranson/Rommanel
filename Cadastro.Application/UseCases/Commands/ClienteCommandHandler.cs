@@ -19,6 +19,7 @@ namespace Cadastro.Application.UseCases.Commands
             //    throw new RetornoException(nameof(UpdatePatrimoniaCommandResponse), Erros.ObterErro(ErroType.TamanhoPaginaSuperiorAoPermitido), HttpStatusCode.UnprocessableEntity);
 
             //var response = AtualizarDadosCotacao(request, cancellationToken);
+            var teste = _appDbContext.Clientes.FirstOrDefault();
 
             var response = new ClienteCommandResponse();
 

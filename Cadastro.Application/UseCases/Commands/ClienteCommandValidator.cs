@@ -7,7 +7,7 @@ namespace Cadastro.Application.UseCases.Commands
     {
         public ClienteCommandValidator()
         {
-            RuleFor(query => query.Nome).NotNull().SetValidator(new ClienteValidator());
+            //RuleFor(query => query.NomeRazaoSocial).NotNull().SetValidator(new ClienteValidator());
         }        
     }
 }

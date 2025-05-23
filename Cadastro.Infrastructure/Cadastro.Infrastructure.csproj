@@ -14,4 +14,8 @@
   <ItemGroup>    <ProjectReference Include="..\Cadastro.Application\Cadastro.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Persistence\Cliente\" />
+  </ItemGroup>
+
 </Project>

@@ -1,7 +1,7 @@
 ﻿using Cadastro.Application.Common.Interfaces;
-using Cadastro.Domain.Events; 
+using Cadastro.Domain.Events;
 using Cadastro.Domain.Interfaces;
-using Cadastro.Infrastructure;
+using Cadastro.Infrastructure.Persistence;
 using System.Text.Json;
 
 public class SqlEventStore : IEventStore

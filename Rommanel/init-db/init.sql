@@ -1,0 +1,43 @@
+-- Criação do banco
+CREATE DATABASE CadastroClientesDb;
+GO
+
+USE CadastroClientesDb;
+GO
+
+-- Criação das tabelas Cliente e Endereco
+
+CREATE TABLE Cliente (
+    ClienteId UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    NomeRazaoSocial NVARCHAR(200) NOT NULL,
+    Documento NVARCHAR(20) NOT NULL UNIQUE,
+    DataNascimento DATE NOT NULL,
+    Telefone NVARCHAR(20),
+    Email NVARCHAR(100) NOT NULL UNIQUE,
+    IsPessoaJuridica BIT NOT NULL,
+    InscricaoEstadual NVARCHAR(50),
+    IsentoIE BIT NOT NULL DEFAULT 0
+);
+GO
+
+CREATE TABLE Endereco (
+    EnderecoId UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    ClienteId UNIQUEIDENTIFIER NOT NULL,
+    CEP NVARCHAR(10) NOT NULL,
+    Logradouro NVARCHAR(200) NOT NULL,
+    Numero NVARCHAR(20) NOT NULL,
+    Bairro NVARCHAR(100) NOT NULL,
+    Cidade NVARCHAR(100) NOT NULL,
+    Estado NVARCHAR(50) NOT NULL,
+    CONSTRAINT FK_Endereco_Cliente FOREIGN KEY (ClienteId) REFERENCES Cliente(ClienteId) ON DELETE CASCADE
+);
+GO
+
+CREATE TABLE StoredEvent (
+    Id UNIQUEIDENTIFIER NOT NULL PRIMARY KEY,
+    AggregateId UNIQUEIDENTIFIER NOT NULL,
+    TipoEvento NVARCHAR(255) NOT NULL,
+    Dados NVARCHAR(MAX) NOT NULL, 
+    DataOcorrencia DATETIME2 NOT NULL
+);
+GO

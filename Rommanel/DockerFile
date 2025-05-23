@@ -1,0 +1,19 @@
+FROM mcr.microsoft.com/mssql/server:2022-latest
+
+USER root
+
+ENV ACCEPT_EULA=Y
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && \
+    apt-get install -y curl gnupg apt-transport-https software-properties-common && \
+    curl -sSL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg && \
+    install -o root -g root -m 644 microsoft.gpg /etc/apt/trusted.gpg.d/ && \
+    echo "deb [arch=amd64] https://packages.microsoft.com/ubuntu/22.04/prod jammy main" > /etc/apt/sources.list.d/mssql-release.list && \
+    apt-get update && \
+    ACCEPT_EULA=Y apt-get install -y mssql-tools unixodbc-dev && \
+    ln -s /opt/mssql-tools/bin/sqlcmd /usr/bin/sqlcmd && \
+    ln -s /opt/mssql-tools/bin/bcp /usr/bin/bcp && \
+    apt-get clean && rm -rf /var/lib/apt/lists/* microsoft.gpg
+
+USER mssql

@@ -1,26 +1,53 @@
 ﻿using Cadastro.Application.UseCases.Commands;
+using Cadastro.Application.UseCases.Queries.Cliente;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace API.Controllers
+[ApiController]
+[Route("api/[controller]")]
+public class ClienteController : ControllerBase
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class ClienteController : ControllerBase
+    private readonly IMediator _mediator;
+
+    public ClienteController(IMediator mediator)
     {
-        private readonly IMediator _mediator;
+        _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+    }
 
-        public ClienteController(IMediator mediator)
-        {
-            _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-        }
+    [HttpPost]
+    public async Task<IActionResult> Post([FromBody] CreateClienteCommand command)
+    {
+        var result = await _mediator.Send(command);
+        return CreatedAtAction(nameof(GetById), new { id = result }, result);
+    }
 
-        [HttpPost]
-        public async Task<IActionResult> Post([FromBody] ClienteCommandRequest command)
-        {
-            var result = await _mediator.Send(command);
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById(Guid id)
+    {
+        var result = await _mediator.Send(new GetClienteByIdQuery(id));
+        return result != null ? Ok(result) : NotFound();
+    }
 
-            return Ok(result);
-        }
+    [HttpGet]
+    public async Task<IActionResult> GetAll()
+    {
+        var result = await _mediator.Send(new GetAllClientesQuery());
+        return Ok(result);
+    }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Put(Guid id, [FromBody] UpdateClienteCommand command)
+    {
+        if (id != command.Id) return BadRequest("Id da URL e do body não coincidem.");
+
+        var result = await _mediator.Send(command);
+        return Ok(result);
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(Guid id)
+    {
+        var result = await _mediator.Send(new DeleteClienteCommand(id));
+        return Ok(result);
     }
 }
