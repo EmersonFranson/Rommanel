@@ -4,12 +4,15 @@ using Cadastro.Application.UseCases.Commands;
 using Cadastro.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Cadastro.Infrastructure.Persistence;
+using System.Reflection;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // ⛓️ Add Controllers
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 builder.Services.AddControllers();
 
 // 📦 Swagger
