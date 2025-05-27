@@ -1,6 +1,4 @@
-﻿using Cadastro.Domain.Entities;
-using MediatR;
-using System;
+﻿using MediatR;
 
 namespace Cadastro.Application.UseCases.Commands
 {

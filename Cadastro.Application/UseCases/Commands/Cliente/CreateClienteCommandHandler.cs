@@ -30,6 +30,7 @@ namespace Cadastro.Application.UseCases.Handlers
             };
             cliente.Endereco = new Endereco()
             {
+                ClienteId = cliente.ClienteId,
                 Logradouro = request.Endereco.Logradouro,
                 Numero = request.Endereco.Numero,
                 Bairro = request.Endereco.Bairro,
@@ -39,7 +40,8 @@ namespace Cadastro.Application.UseCases.Handlers
             };
 
             _context.Clientes.Add(cliente);
-            await _context.SaveChangesAsync(cancellationToken);
+            await _context.AdicionarClienteAsync(cliente,cancellationToken);
+            _context.AdicionarEnderecoAsync(cliente.Endereco, cancellationToken);
 
             // Serializa os dados do cliente para armazenar no evento
             var dadosEvento = System.Text.Json.JsonSerializer.Serialize(cliente);

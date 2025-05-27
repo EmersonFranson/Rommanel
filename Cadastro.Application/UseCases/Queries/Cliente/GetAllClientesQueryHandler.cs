@@ -18,6 +18,7 @@ namespace Cadastro.Application.UseCases.Handlers
         public async Task<IEnumerable<Cliente>> Handle(GetAllClientesQuery request, CancellationToken cancellationToken)
         {
             return await _context.Clientes
+                .Where(x=> x.IsDeleted == false)
                 .Include(c => c.Endereco)
                 .ToListAsync(cancellationToken);
         }

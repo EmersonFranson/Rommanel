@@ -1,8 +1,7 @@
 ﻿using Cadastro.Application.Common.Interfaces.Persistence;
 using Cadastro.Application.UseCases.Commands;
+using Cadastro.Domain.Events;
 using MediatR;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Cadastro.Application.UseCases.Handlers
 {
@@ -20,7 +19,22 @@ namespace Cadastro.Application.UseCases.Handlers
             var cliente = await _context.Clientes.FindAsync(new object[] { request.Id }, cancellationToken);
             if (cliente == null) return false;
 
-            _context.Clientes.Remove(cliente);
+            cliente.IsDeleted = true; // Marca o cliente como deletado
+
+            await _context.AtualizarClienteAsync(cliente, cancellationToken);
+
+            // Serializa os dados do cliente para armazenar no evento
+            var dadosEvento = System.Text.Json.JsonSerializer.Serialize(cliente);
+
+            // Cria o evento de criação
+            var evento = new StoredEvent(
+                aggregateId: cliente.ClienteId,
+                tipoEvento: "ClienteDeletado",
+                dados: dadosEvento
+            );
+
+            _context.StoredEvents.Add(evento);
+
             await _context.SaveChangesAsync(cancellationToken);
 
             return true;

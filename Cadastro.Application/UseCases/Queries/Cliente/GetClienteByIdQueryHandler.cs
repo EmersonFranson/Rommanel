@@ -17,9 +17,15 @@ namespace Cadastro.Application.UseCases.Handlers
 
         public async Task<Cliente> Handle(GetClienteByIdQuery request, CancellationToken cancellationToken)
         {
-            return await _context.Clientes
+            var response = await _context.Clientes
+                .Where(x => x.IsDeleted == false)
                 .Include(c => c.Endereco)
                 .FirstOrDefaultAsync(c => c.ClienteId == request.Id, cancellationToken);
+
+            if (response == null)
+                return null;
+
+            return response;
         }
     }
 }

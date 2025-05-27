@@ -1,5 +1,6 @@
 ﻿using Cadastro.Application.UseCases.Commands;
 using Cadastro.Application.UseCases.Queries.Cliente;
+using Cadastro.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,8 +25,9 @@ public class ClienteController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(Guid id)
     {
-        var result = await _mediator.Send(new GetClienteByIdQuery(id));
-        return result != null ? Ok(result) : NotFound();
+        var result = await _mediator.Send(new GetClienteByIdQuery(id));       
+
+        return result != null ? Ok(result) : NotFound("Cliente não Encontrado!");
     }
 
     [HttpGet]

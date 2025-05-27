@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace Cadastro.Application.Common.Validators.Cliente
 {
-    public class ClienteValidator : AbstractValidator<ClienteCommandRequest?>
+    public class ClienteValidator : AbstractValidator<CreateClienteCommand?>
     {
         public ClienteValidator()
         {
@@ -12,7 +12,7 @@ namespace Cadastro.Application.Common.Validators.Cliente
                 .NotEmpty().WithMessage("Nome ou Razão Social é obrigatório.")
                 .MaximumLength(200);
 
-            RuleFor(c => c.CpfCnpj)
+            RuleFor(c => c.Documento)
                 .NotEmpty().WithMessage("CPF ou CNPJ é obrigatório.")
                 .Must(IsValidCpfOrCnpj).WithMessage("CPF ou CNPJ inválido.");
 
@@ -24,7 +24,7 @@ namespace Cadastro.Application.Common.Validators.Cliente
                 .NotEmpty().WithMessage("Telefone é obrigatório.")
                 .MaximumLength(20);
 
-            When(c => IsCpf(c.CpfCnpj), () =>
+            When(c => IsCpf(c.Documento), () =>
             {
                 RuleFor(c => c.DataNascimento)
                     .NotEmpty().WithMessage("Data de nascimento é obrigatória.")
@@ -32,7 +32,7 @@ namespace Cadastro.Application.Common.Validators.Cliente
                     .WithMessage("Idade mínima para CPF é de 18 anos.");
             });
 
-            When(c => IsCnpj(c.CpfCnpj), () =>
+            When(c => IsCnpj(c.Documento), () =>
             {
                 RuleFor(c => c.InscricaoEstadual)
                     .NotEmpty().When(c => !c.IsentoIE)

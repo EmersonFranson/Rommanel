@@ -1,8 +1,11 @@
 ﻿using Cadastro.Application.Common.Interfaces.Persistence;
+using Cadastro.Application.Common.Validators.Cliente;
 using Cadastro.Application.UseCases.Commands;
+using Cadastro.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using Cadastro.Infrastructure.Persistence;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,6 +41,9 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(
     typeof(Program).Assembly,
     typeof(ClienteCommandRequest).Assembly
 ));
+
+builder.Services.AddValidatorsFromAssemblyContaining<ClienteValidator>();
+builder.Services.AddFluentValidationAutoValidation();
 
 var app = builder.Build();
 

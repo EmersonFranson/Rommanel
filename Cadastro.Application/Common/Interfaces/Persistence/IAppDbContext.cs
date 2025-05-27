@@ -14,9 +14,9 @@ namespace Cadastro.Application.Common.Interfaces.Persistence
         Task<List<Domain.Entities.Cliente>> BuscarTodosClientesAsync(CancellationToken cancellationToken = default);
         Task<Domain.Entities.Cliente?> BuscarClientePorIdAsync(Guid id, CancellationToken cancellationToken = default);
         Task<Domain.Entities.Cliente> AdicionarClienteAsync(Domain.Entities.Cliente cliente, CancellationToken cancellationToken = default);
-        Task<Domain.Entities.Cliente?> AtualizarClienteAsync(Domain.Entities.Cliente clienteAtualizado, CancellationToken cancellationToken = default);
+        void AdicionarEnderecoAsync(Endereco endereco, CancellationToken cancellationToken = default);
+        Task<Domain.Entities.Cliente?> AtualizarClienteAsync(Domain.Entities.Cliente clienteAtualizado, CancellationToken cancellationToken = default);        
         Task<bool> RemoverClienteAsync(Guid id, CancellationToken cancellationToken = default);
-
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
 }

@@ -2,7 +2,7 @@
 {
     public class Cliente 
     {
-        public Guid ClienteId { get;  set; }
+        public Guid ClienteId { get;  set; } = Guid.NewGuid();
         public string NomeRazaoSocial { get;  set; }
         public string Documento { get;  set; }
         public DateTime? DataNascimento { get; set; }
@@ -11,6 +11,7 @@
         public bool IsPessoaJuridica { get; set; }        
         public string? InscricaoEstadual { get; set; }
         public bool IsentoIE { get; set; }
+        public bool IsDeleted { get; set; }
         public Endereco Endereco { get; set; }
     }
 }

@@ -33,10 +33,13 @@ namespace Cadastro.Infrastructure.Persistence
         public async Task<Cliente> AdicionarClienteAsync(Cliente cliente, CancellationToken cancellationToken = default)
         {
             await Clientes.AddAsync(cliente, cancellationToken);
-            await Enderecos.AddAsync(cliente.Endereco, cancellationToken);
-            await SaveChangesAsync(cancellationToken);
             return cliente;
         }
+
+        public async void AdicionarEnderecoAsync(Endereco endereco, CancellationToken cancellationToken = default)
+        {
+            await Enderecos.AddAsync(endereco, cancellationToken);
+        }       
 
         public async Task<Cliente?> AtualizarClienteAsync(Cliente clienteAtualizado, CancellationToken cancellationToken = default)
         {
@@ -88,12 +91,6 @@ namespace Cadastro.Infrastructure.Persistence
 
                 entity.HasIndex(c => c.Email).IsUnique();
                 entity.HasIndex(c => c.Documento).IsUnique();
-
-                //// Relacionamento 1:1 com Endereco
-                //entity.HasOne(c => c.Endereco)
-                //      .WithOne(e => e.Cliente)
-                //      .HasForeignKey<Endereco>(e => e.ClienteId)
-                //      .OnDelete(DeleteBehavior.Cascade);
             });
 
             modelBuilder.Entity<Endereco>(entity =>
